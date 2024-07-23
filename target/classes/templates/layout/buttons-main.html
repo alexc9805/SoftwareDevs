@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="row row-cols-1 row-cols-md-3 g-4 w-75 col-auto" th:fragment="buttons-main">
+  <div class="col">
+    <div class="card h-100">
+      <img src="/assets/enterprise.svg" class="card-img-top" alt="empresas">
+      <div class="card-body">
+        <h5 class="card-title mb-2">Sistema de gestion de empresas</h5>
+        <p class="card-text">Ver, crear, modificar y eliminar empresas.</p>
+      </div>
+      <div class="card-footer">
+        <a th:href="@{/enterprises}" class="nav-link active btn btn-primary text-white">Ingresar</a>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card h-100">
+      <img src="/assets/employee.svg" class="card-img-top" alt="empleados">
+      <div class="card-body">
+        <h5 class="card-title mt-5">Sistema de gestion de usuarios</h5>
+        <p class="card-text">Ver, crear, modificar y eliminar un usuario.</p>
+      </div>
+      <div class="card-footer">
+        <a th:href="@{/employees}" class="nav-link active btn btn-primary text-white">Ingresar</a>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card h-100">
+      <img src="/assets/transaction.svg" class="card-img-top" alt="transacciones-imagen">
+      <div class="card-body">
+        <h5 class="card-title mt-5">Sistema de gestion de ingresos y egresos</h5>
+        <p class="card-text">Realizar un movimiento de dinero.</p>
+      </div>
+      <div class="card-footer">
+        <a th:href="@{/transaction}" class="nav-link active btn btn-primary text-white">Ingresar</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

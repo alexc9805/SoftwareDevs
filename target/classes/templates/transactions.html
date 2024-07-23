@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layout/layout}">
+<head th:replace="layout/layout :: head">
+</head>
+<body>
+<div class="container-fluid" layout:fragment="page-content">
+  <div sec:authorize="!isAuthenticated()" >
+    <a class="btn btn-success mb-2" th:href="@{/}">Debe ingresar primero</a>
+  </div>
+  <div sec:authorize="isAuthenticated()">
+    <div th:if="${user==null}">
+      <a class="btn btn-success mb-2" th:href="@{/}">Usuario no registrado</a>
+    </div>
+    <div th:if="${user!=null}">
+  <div class="col-12">
+    <h2>Transacciones</h2>
+    <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+         th:text="${mensaje}"
+         class="alert">
+    </div>
+    <a class="btn btn-success mb-2" th:href="@{/transactions/add}">Agregar</a>
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>Concepto</th>
+        <th>Monto</th>
+        <th>Fecha</th>
+        <th>Usuario Responsable</th>
+        <th>Editar</th>
+        <th>Eliminar</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="transaccion : ${transacciones}">
+        <td th:text="${transaccion.concept}"></td>
+        <td th:text="${transaccion.amount}"></td>
+        <td th:text="${transaccion.createAt}"></td>
+        <td th:text="${transaccion.employee.name}"></td>
+
+        <td>
+          <a class="btn btn-warning" th:href="@{/transactions/} + ${transaccion.id}">Editar <i
+                  class="fa fa-edit"></i></a>
+        </td>
+        <td>
+          <form th:action="@{/transactions/}+ ${transaccion.id}" th:method="delete">
+            <button type="submit" class="btn btn-danger">Eliminar <i class="fa fa-trash"></i>
+            </button>
+          </form>
+        </td>
+
+      </tr>
+      </tbody>
+    </table>
+    <label>Total</label>
+    <td th:text="${total}"></td>
+  </div>
+    </div>
+  </div>
+
+
+
+</div>
+<!--OTRO SCRIPTS PARA PAGINAS-->
+<th:block layout:fragment="page-scripts">
+
+</th:block>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layout/layout}">
+<head th:replace="layout/layout :: head">
+
+</head>
+<body>
+<div class="container-fluid" layout:fragment="page-content">
+
+    <div sec:authorize="!isAuthenticated()">
+        <div class="container-md d-flex align-items-center justify-content-center" style="height : 40rem;">
+            <div class="card shadow-sm p-3 mb-5 bg-body rounded" style="width: 20rem;">
+                <div class="card-body">
+                    <p class="card-text text-center mt-3">Hola, en estos momentos no tienes acceso.</p>
+                    <a th:href="@{/}" class="nav-link active btn btn-success mb-2">Debe ingresar primero</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div sec:authorize="isAuthenticated()">
+        <div th:if="${user==null}">
+            <a class="btn btn-success mb-2" th:href="@{/}">Usuario no registrado</a>
+        </div>
+        <div th:if="${user!=null}">
+            <div th:if="${#strings.toString(user.getRole())}=='ADMIN'">
+                <div class="col-12">
+                    <h2>Editar Empleado</h2>
+                    <form th:action="@{/user/}+ ${employeeModel.id}" th:method="patch" class="d-flex flex-column gap-3">
+                        <input type="hidden" th:field="${employeeModel.id}">
+
+                        <div class="form-group">
+                            <label for="name">Nombre</label>
+                            <input autocomplete="off" autofocus th:field="${employeeModel.name}" id="name"
+                                   placeholder="Escribe el nombre del empleado" type="text"
+                                   class="form-control">
+                            <div class="invalid-feedback" th:errors="${employeeModel.name}"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Correo</label>
+                            <input autocomplete="off" th:field="${employeeModel.email}" id="email" placeholder="Escribe el email del empleado"
+                                   type="text"
+                                   class="form-control">
+                            <div class="invalid-feedback" th:errors="${employeeModel.email}"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Telefono del empleado</label>
+                            <input autocomplete="off" th:field="${profileEmployeeModel.phone}" id="phone"
+                                   placeholder="Escribe el telefono del empleado" type="number"
+                                   class="form-control">
+                            <div class="invalid-feedback" th:errors="${profileEmployeeModel.phone}"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Rol del empleado</label>
+                            <select name="role" th:field="${employeeModel.role}">
+                                <option th:each="role : ${T(com.softwaredevs.proyecto.entities.Enum_RoleName).values()}" th:value="${role}" th:text="${role}">
+                                </option>
+                            </select>
+                            <div class="invalid-feedback" th:errors="${employeeModel.role}"></div>
+                        </div>
+
+                        <button class="btn btn-success" type="submit">Editar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--OTRO SCRIPTS PARA PAGINAS-->
+<th:block layout:fragment="page-scripts">
+
+</th:block>
+</body>
+</html>

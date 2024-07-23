@@ -1,0 +1,7 @@
+1. Archivo creado por Brayan Capera Velandia, prueba pull request.
+2. Archivo modificado por Sixto Alberto Orobio
+3. Modificacion rama development.
+4. Archivo modificado por Aldair Anaya
+5. Archivo modificado por Erika González
+6. Archivo modificado por Luis Alejandro Acosta
+7. Cambio 19/08/2022 Pull request rama development.

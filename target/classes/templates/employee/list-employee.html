@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layout/layout}">
+<head th:replace="layout/layout :: head">
+</head>
+<body>
+<!-- Page content Contenido dinamico-->
+<div class="container-fluid" layout:fragment="page-content">
+
+    <div sec:authorize="!isAuthenticated()">
+        <div class="container-md d-flex align-items-center justify-content-center" style="height : 40rem;">
+            <div class="card shadow-sm p-3 mb-5 bg-body rounded" style="width: 20rem;">
+                <div class="card-body">
+                    <p class="card-text text-center mt-3">Hola, en estos momentos no tienes acceso.</p>
+                    <a th:href="@{/}" class="nav-link active btn btn-success mb-2">Debe ingresar primero</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div sec:authorize="isAuthenticated()">
+
+        <div th:if="${user==null}">
+            <a class="btn btn-success mb-2" th:href="@{/}">Usuario no registrado</a>
+        </div>
+
+        <div class="col-12">
+            <h2>Employee</h2>
+            <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+                 th:text="${mensaje}"
+                 class="alert">
+            </div >
+            <div th:if="${#strings.toString(user.getRole())}=='ADMIN'">
+                <a class="btn btn-success mb-2" th:href="@{/employees/add}">Agregar</a>
+            </div>
+
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Telefono</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="employee : ${listEmployees}">
+                    <td th:text="${employee.name}"></td>
+                    <td th:text="${employee.email}"></td>
+                    <td th:text="${employee.profile.phone}"></td>
+                    <td th:if="${#strings.toString(user.getRole())}=='ADMIN'">
+                        <a class="btn btn-warning" th:href="@{/employee/} + ${employee.id}">Editar <i
+                                class="fa fa-edit"></i></a>
+                    </td>
+                    <td th:if="${#strings.toString(user.getRole())}=='ADMIN'">
+                        <form th:action="@{/employee/}+ ${employee.id}" th:method="delete">
+                            <button type="submit" class="btn btn-danger">Eliminar <i class="fa fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                    <td th:if="${#strings.toString(user.getRole())}=='OPERARIO'">Bloqueado</td>
+                    <td th:if="${#strings.toString(user.getRole())}=='OPERARIO'">Bloqueado</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--OTRO SCRIPTS PARA PAGINAS-->
+<th:block layout:fragment="page-scripts">
+
+</th:block>
+</body>
+</html>

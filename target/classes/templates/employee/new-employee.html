@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layout/layout}">
+<head th:replace="layout/layout :: head">
+</head>
+<body>
+<div class="container-fluid" layout:fragment="page-content">
+
+    <div sec:authorize="!isAuthenticated()">
+        <a class="btn btn-success mb-2" th:href="@{/}">Debe ingresar primero</a>
+    </div>
+
+    <div sec:authorize="isAuthenticated()">
+        <div th:if="${user==null}">
+            <a class="btn btn-success mb-2" th:href="@{/}">Usuario no registrado</a>
+        </div>
+        <div th:if="${user!=null}">
+            <div th:if="${#strings.toString(user.getRole())}=='ADMIN'">
+                <div class="col-12">
+                    <h2>Agregar Usuario</h2>
+                    <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+                         th:text="${mensaje}"
+                         class="alert">
+                    </div>
+                    <form  th:action="@{/employee}" method="post" class="d-flex flex-column gap-3">
+                        <div class="form-group">
+                            <label for="name">Nombre</label>
+                            <input autocomplete="off" autofocus th:field="${employeeModel.name}" id="name"
+                                   placeholder="Escribe el nombre del empleado" type="text"
+                                   class="form-control">
+                            <div class="invalid-feedback" th:errors="${employeeModel.name}"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Correo</label>
+                            <input autocomplete="off" autofocus th:field="${employeeModel.email}" id="email"
+                                   placeholder="Escriba su email" type="text"
+                                   class="form-control">
+                            <div class="invalid-feedback" th:errors="${employeeModel.email}"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Rol</label>
+                            <select name="role" th:field="${employeeModel.role}">
+                                <option th:each="role : ${T(com.softwaredevs.proyecto.entities.Enum_RoleName).values()}" th:value="${role}" th:text="${role}">
+                                </option>
+                            </select>
+                            <div class="invalid-feedback" th:errors="${employeeModel.role}"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Telefono</label>
+                            <input autocomplete="off" autofocus th:field="${profileModel.phone}" id="phone"
+                                   placeholder="Escriba su telefono" type="text"
+                                   class="form-control">
+                            <div class="invalid-feedback" th:errors="${profileModel.phone}"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Empresa</label>
+                            <select th:field="${employeeModel.enterprise}">
+                                <option th:each="enterprise : ${enterpriseModel}"
+                                        th:value="${enterprise.id}"
+                                        th:text="${enterprise.name}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <button class="btn btn-success" type="submit">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--OTRO SCRIPTS PARA PAGINAS-->
+<th:block layout:fragment="page-scripts">
+
+</th:block>
+</body>
+</html>
